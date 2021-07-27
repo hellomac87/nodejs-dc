@@ -2,17 +2,48 @@ import express from 'express';
 
 const app = express();
 
-app.get('/sky/:id', (req, res, next) => {
-  //   console.log(req.path);
-  //   console.log(req.header);
-  console.log(req.params);
-  console.log(req.params.id);
-  console.log(req.query);
-  console.log(req.query.keyword);
+app.all('/api', (req, res, next) => {
+  // app.all('/api/*', (req, res, next) => {
+  // 해당 경로에 대해서만
+  console.log('all');
+  next();
+});
+app.use('/sky', (req, res, next) => {
+  // 해당 경로로 시작하는 모든 경로
+  console.log('use');
+  next();
+});
 
-  //   res.json({ name: 'dobby' });
-  res.setHeader('key', 'value');
-  res.status(201).send('created');
+app.get(
+  '/',
+  (req, res, next) => {
+    console.log('first');
+    // next();
+    // next('route');
+    // next(new Error('error'));
+    // res.send('hello!');
+    // if (true) {
+    //   return res.send('hello');
+    // }
+    // res.send('dobby');
+  },
+  (req, res, next) => {
+    console.log('first2');
+    // next();
+  }
+);
+
+app.get('/', (req, res, next) => {
+  console.log('second');
+});
+
+app.use((req, res, next) => {
+  res.status(404).send('not available!@_@');
+});
+
+app.use((error, req, res, next) => {
+  console.log(error);
+  res.status(500).send('sorry! try later');
 });
 
 app.listen(8080);
