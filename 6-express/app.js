@@ -5,15 +5,15 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 
 const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(morgan('combined'))
-app.use(cors({
+const corsOption = {
   origin:['http://127.0.0.1:5500'],
   optionsSuccessStatus:200,
   credentials:true
-}));
+}
+app.use(express.json());
+app.use(cookieParser());
+app.use(morgan('tiny'))
+app.use(cors());
 app.use(helmet())
 app.get('/', (req, res) => {
   console.log(req.body)
