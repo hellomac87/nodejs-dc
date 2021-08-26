@@ -1,39 +1,24 @@
 import express from 'express';
-import fs from 'fs';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
+import helmet from 'helmet';
 
 const app = express();
 
 app.use(express.json());
-
-app.route('/posts')
-.get((req, res, next) => {
-  res.status(201).send('GET: /posts');
-})
-.post((req, res) => {
-  res.status(201).send('GET: /posts');
-})
-
-app.route('/posts/:id')
-.put((req, res) => {
-  res.status(201).send('PUT: /posts/:id');
-})
-.delete((req,res) => {
-  res.status(201).send('DELETE: /posts/:id');
-})
-
-// app.get('/posts' , (req, res) => {
-//   res.status(201).send('GET: /posts');
-// })
-
-// app.post('/posts' , (req, res) => {
-//   res.status(201).send('POST: /posts');
-// })
-
-// app.put('/posts/:id' , (req, res) => {
-//   res.status(201).send('PUT: /posts/:id');
-// })
-// app.delete('/posts/:id' , (req, res) => {
-//   res.status(201).send('DELETE: /posts/:id');
-// })
+app.use(cookieParser());
+app.use(morgan('combined'))
+app.use(cors({
+  origin:['http://127.0.0.1:5500'],
+  optionsSuccessStatus:200,
+  credentials:true
+}));
+app.use(helmet())
+app.get('/', (req, res) => {
+  console.log(req.body)
+  console.log(req.cookies)
+  res.send('Welcome!');
+});
 
 app.listen(8080);
